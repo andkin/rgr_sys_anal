@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<title>rgr</title>
+<style>
+.container{
+  
+  height:100px;
+  display:inline-block;
+}
+.block{
+  width:50px;
+  height:50px;
+  background:white;
+  text-align:center;
+  display:inline-block;
+  border:1px solid black;
+
+}
+.blockStrelka{
+  width:50px;
+  height:50px;
+  background:white;
+  text-align:center;
+  display:inline-block;
+}
+ 
+</style>
+<div>
+<script>
+$(document).ready(function(){
+$('#Draw').click(function(){
+  let n = $("#n").val();
+  let m = $("#m").val();
+  let mu = $("#mu").val();
+  let lambda = $("#lambda").val();
+  let sum = parseInt(n)+parseInt(m)+1;
+  let sumForRow = 0;
+  let field = document.getElementById("TheList");
+  let po = lambda/mu;
+
+  function fact(x) {
+   if(x==0) {
+      return 1;
+   }
+   return x * fact(x-1);
+}
+
+	function getRandomInt(min, max)
+{
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+
+  $('#blockStrelka').append('<div class="block"><br><br>S0<br></div>');
+
+  for(let i=0;i<parseInt(n);i++){
+    $('#blockStrelka').append('<div class="blockStrelka">&lambda;<br>------><br><------<br>'+(i+1)+'&mu;</div><div class="block"><br><br>S'+(i+1)+'<br></div>');
+  }
+
+  for(let i=0;i<parseInt(m)-1;i++){
+    $('#blockStrelka').append('<div class="blockStrelka">&lambda;<br>------><br><------<br>'+n+'&mu;</div><div class="block"><br><br>S'+(i+1+parseInt(n))+'<br></div>');
+  }
+
+    $('#blockStrelka').append('<div class="blockStrelka">&lambda;<br>------><br><------<br>'+n+'&mu;</div><div class="block"><br><br>S'+(parseInt(n)+parseInt(m))+'<br></div>');
+   	
+   	let sum1 = 0;
+   	for(let i=0;i<parseInt(n);i++){
+   		//sumForRow = (1/((Math.pow(po,i)/fact(i)) + (Math.pow(po,(n+1))/(fact(n)*(n-po)))*(1-Math.pow((po/n),m))));
+   		n1 = Math.pow(po,i);
+   		n2 = n1/fact(i);
+   		sum1+=n2;
+   	}
+   		n3 = Math.pow(po,(parseInt(n)+1));
+   		n4 = fact(parseInt(n))*(parseInt(n)-po);
+   		n5 = n3/n4;
+   		n6 = 1 - Math.pow((po/parseInt(n)),parseInt(m));
+   		n7 = 1/(sum1 +n5+ n6);
+
+  
+  	console.log('Время обслуживания (1/mu) = ' + (1/mu));
+ 	console.log('Интенсивность нагрузки (p = lambda/mu = ' + po);
+ 	console.log('Вероятность того что канал свободен p[0] = ' + n7);
+ 	for(i=0;i<parseInt(n);i++){
+ 		p = Math.pow(po,i)/fact(i) * n7;
+ 		console.log("Вероятность того, что обслуживанием занято " + (i+1) + "канал(а) p[" + (i+1) + "] = " + p);
+ 	}
+
+ 	let id = setInterval(() => {
+ 		const count = getRandomInt(1, parseInt(n) + parseInt(m));
+ 		const countSecond = getRandomInt(1, count);
+ 		console.log(`${new Date().toLocaleString()} | Количетсво поступивших заявок: ${count} | Количетсво обработанных заявок: ${countSecond}`);
+ 		
+ 	}, 5000);
+  
+
+  });
+});
+</script>
+<div>
+</head>
+<body>
+	<div>
+		<h1>Вариант 6. Многоканальная СМО с ограничением на длину очереди</h1>
+		<hr>
+n = <input type="number" value=5 id="n">
+m = <input type="number" value=7 id="m">
+mu = <input type="number" value=2 id="mu">
+lambda = <input type="number" value=7 id="lambda">
+
+<input type="button" id="Draw" value="Draw">
+<hr>
+</div>
+
+
+<div id="blockStrelka"></div>
+</body>
+</html>
